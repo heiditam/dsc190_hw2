@@ -1,0 +1,21 @@
+---
+title: "Video Game Preferences Among UC Berkeley Stats Students in Fall 1994"
+author: Heidi Tam and Paige Pagaduan
+output: pdf_document
+date: "2024-10-19"
+font: 12pt
+---
+
+# 0. Contribution Statement
+
+\pagebreak
+
+\pagenumbering{arabic}
+
+# 1. Introduction
+
+
+### Data
+The data from videodata.txt and videoMultiple.txt were collected as part of a survey for students at UC Berkeley enrolled in a particular statistics course that had about 3000-4000 students. Students from Statistics 2, Section 1, in Fall 1994, were invited to participate in the survey if they partook in the second exam of the course. Within this section, 314 students were eligible to participate and 95 students were randomly selected through a random number generator.
+The data from videodata.txt was the first part of the survey and asked about background information of the survey participant. The data was numerical and discrete (e.g., Time, the number of hours played in the week prior to the survey as an integer) or categorical but encoded as a numerical value (e.g., Like to play, rated on a scale of 1 to 5).
+The data from videoMultiple.txt was the second part of the survey and covered whether the student likes or dislikes playing video games. In these questions, more than one response could be given. The data in this file was recorded as binary values indicating whether the student selected that option. Some columns also contain string values if the student provided a reason that was not given as to why they dislike video games. 
