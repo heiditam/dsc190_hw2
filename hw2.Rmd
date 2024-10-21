@@ -63,3 +63,6 @@ It is important to note that it would be incorrect to state we are 95% confident
 ### Conclusion
 The point estimate gives the best estimate for the proportion of students who played a video game in the week prior to taking the survey through a single value, while the interval estimate estimates this proportion through a range of values. However, this range is not guaranteed to have all sample proportions within this range if we repeated the sampling process many times. The higher our confidence level, the wider the interval range since there is a higher likelihood of the sampling proportions falling into the confidence level. Similarly, the lower our confidence level, the smaller the confidence interval. 
 
+## Question 02
+### Methods
+To understand the 
