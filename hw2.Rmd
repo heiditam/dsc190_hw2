@@ -65,4 +65,4 @@ The point estimate gives the best estimate for the proportion of students who pl
 
 ## Question 02
 ### Methods
-To understand the 
+To understand the differences in distributions of the hours played per week and the reported frequency of play, we graphed each as a frequency histogram. 
