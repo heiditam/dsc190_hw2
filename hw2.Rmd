@@ -29,6 +29,9 @@ The data from videoMultiple.txt was the second part of the survey and covered wh
 First, we loaded the data in through R.
 
 ```{r setup, include=FALSE}
+
+# TODO: bootstrap
+
 knitr::opts_chunk$set(echo = TRUE)
 video_data = read.table("videodata.txt", header=TRUE)
 video_multiple = read.table("videoMultiple.txt", header=TRUE)
