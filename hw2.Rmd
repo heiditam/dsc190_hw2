@@ -39,16 +39,25 @@ video_multiple = read.table("videoMultiple.txt", header=TRUE)
 
 To determine a point estimate of the fraction of students we played a video game in the week prior to the survey, we need the total number of students. The video_data table has 91 observations and 15 variables. Since we have no way of proving that each student only filled out the form once, we will assume so for this assignment. 
 
+Data Cleaning:
+
+We will replace all values of 99 with NA. 
+
+```{r}
+video_data[video_data == 99] <- NA
+```
+
+POINT ESTIMATE: We can count the number of students who played a video game in the week prior to the survey by counting the number of students who played a video game for more than zero hours in the week prior. 
 ```{r}
 n <- nrow(video_data)
-# POINT ESTIMATE:
-# We can count the number of students who played a video game in the week prior to the survey by counting the number of students who played a video game for more than zero hours in the week prior. 
 played_count <- sum(video_data$time > 0) 
 point_estimate_fraction <- played_count / n
+```
 
-# INTERVAL ESTIMATE:
-# We will construct a confidence interval that contains a range of values that likely contain the population parameter, the proportion of all students who answered the survey who played a video game in the week prior to the survey. 
-# For a 95% confidence interval, we will use z = 1.96.
+INTERVAL ESTIMATE: We will construct a confidence interval that contains a range of values that likely contain the population parameter, the proportion of all students who answered the survey who played a video game in the week prior to the survey. 
+For a 95% confidence interval, we will use z = 1.96.
+
+```{r}
 z <- 1.96
 lower_interval_estimate_fraction <- point_estimate_fraction - z * sqrt(point_estimate_fraction * (1 - point_estimate_fraction) / n)
 upper_interval_estimate_fraction <- point_estimate_fraction + z * sqrt(point_estimate_fraction * (1 - point_estimate_fraction) / n)
@@ -66,3 +75,58 @@ It is important to note that it would be incorrect to state we are 95% confident
 ## Question 02
 ### Methods
 To understand the differences in distributions of the hours played per week and the reported frequency of play, we graphed each as a frequency histogram. 
+
+## Question 03
+### Methods
+
+```{r}
+hist(video_data$time)
+```
+
+Since the distribution of the amount of time people played video games in the week prior to taking the survey is not approximately normal, we need to create a bootstrap population. We can do this by repeating every sample for 314/ 91 is about 3.45 times since our sample was drawn from a population of N = 314 eligible students. 
+
+
+```{r}
+set.seed(371)
+shuffle.ind = sample(1:nrow(video_data))
+boot.population <- rep(video_data$time[shuffle.ind], length.out = 314)
+# Choose our first sample
+sample1 <- sample(boot.population, size = 91, replace = FALSE)
+
+# Choose 400 samples from our bootstrap population and store them in a 2D Array
+# Each row represents a bootstrap sample of size 91 (we have 400 rows/samples)
+# Each column represents an element (we have 91 elements)
+set.seed(6653)
+B = 400
+boot.sample <- array(dim = c(B, 91))
+for (i in 1:B) {
+  boot.sample[i, ] <- sample(boot.population, size = 91, replace = FALSE)
+}
+
+# Calculate the sample mean of each bootstrap sample
+boot.mean <- apply(X = boot.sample, MARGIN = 1, FUN = mean)
+
+# Histogram of Bootstrap sample means
+hist(boot.mean, breaks = 20, probability = TRUE, density = 20, col = 3, border = 3)
+lines(density(boot.mean, adjust = 2), col = 2)
+
+# QQ plot of Bootstrap sample means
+par(pty = 's')
+qqnorm(boot.mean)
+qqline(boot.mean)
+
+# Both the histogram and QQ plot (the points closely follow the straight reference line) imply the bootstrap sample means are approximately normally distributed. 
+```
+
+POINT ESTIMATE: the mean of the bootstrapped sample means array
+
+
+
+```{r}
+# INTERVAL ESTIMATE:
+z <- 1.96
+lower_interval_estimate_fraction <- point_estimate_fraction - z * sqrt(point_estimate_fraction * (1 - point_estimate_fraction) / n)
+upper_interval_estimate_fraction <- point_estimate_fraction + z * sqrt(point_estimate_fraction * (1 - point_estimate_fraction) / n)
+```
+
+
