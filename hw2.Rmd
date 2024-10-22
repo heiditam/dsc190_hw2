@@ -85,7 +85,6 @@ hist(video_data$time)
 
 Since the distribution of the amount of time people played video games in the week prior to taking the survey is not approximately normal, we need to create a bootstrap population. We can do this by repeating every sample for 314/ 91 is about 3.45 times since our sample was drawn from a population of N = 314 eligible students. 
 
-
 ```{r}
 set.seed(371)
 shuffle.ind = sample(1:nrow(video_data))
@@ -114,19 +113,18 @@ lines(density(boot.mean, adjust = 2), col = 2)
 par(pty = 's')
 qqnorm(boot.mean)
 qqline(boot.mean)
-
-# Both the histogram and QQ plot (the points closely follow the straight reference line) imply the bootstrap sample means are approximately normally distributed. 
 ```
 
-POINT ESTIMATE: the mean of the bootstrapped sample means array
+Both the histogram and QQ plot (the points closely follow the straight reference line) imply the bootstrap sample means are approximately normally distributed. This means we can construct a 95% confidence interval. 
 
-
-
+POINT ESTIMATE: the mean of the bootstrapped sample means
 ```{r}
-# INTERVAL ESTIMATE:
-z <- 1.96
-lower_interval_estimate_fraction <- point_estimate_fraction - z * sqrt(point_estimate_fraction * (1 - point_estimate_fraction) / n)
-upper_interval_estimate_fraction <- point_estimate_fraction + z * sqrt(point_estimate_fraction * (1 - point_estimate_fraction) / n)
+point_estimate_average <- mean(boot.mean)
 ```
 
-
+CONFIDENCE INTERVAL: contains a range of values that likely contain the population parameter, the average amount of time spent playing video games in the week before the survey for UC Berkeley students enrolled in a particular section.
+```{r}
+interval_estimate <- c(quantile(boot.mean, 0.025), quantile(boot.mean, 0.975))
+lower_interval_estimate_average <- interval_estimate[[1]]
+upper_interval_estimate_average <- interval_estimate[[2]]
+```
