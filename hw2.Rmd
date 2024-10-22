@@ -124,7 +124,15 @@ point_estimate_average <- mean(boot.mean)
 
 CONFIDENCE INTERVAL: contains a range of values that likely contain the population parameter, the average amount of time spent playing video games in the week before the survey for UC Berkeley students enrolled in a particular section.
 ```{r}
+# Find the values between 2.5% to 97.5% to capture the middle 95% of the data.
 interval_estimate <- c(quantile(boot.mean, 0.025), quantile(boot.mean, 0.975))
 lower_interval_estimate_average <- interval_estimate[[1]]
 upper_interval_estimate_average <- interval_estimate[[2]]
 ```
+
+### Analysis
+The point estimate average, about 1.242, means that after bootstrapping from the original population, we would expect the average amount of time spent playing video games in the week prior to the survey to be about 1.242 hours. 
+The confidence interval estimate average, from about 0.676 to 1.902, means that if we took many independent samples of size 91 from the population, 95% of the samples would capture the true population parameter within this range. 
+
+### Conclusion
+Since our sample data is skewed and we want to estimate the population's properties, we had to bootstrap. We collected 400 samples, each with a size of 91 since our initial sample was of size 91. We double checked for normality using a histogram and QQ Plot before continuing with bootstrapping. Then, we created the point estimate by taking the mean of the bootstrapped samples. Our point estimate was about 1.242, which would be the average amount of time we would expect to be spent playing video games in the week prior to the survey if we had to summarize this in a single value. We also created a 95% confidence interval, which captures 95% of the samples within the range of 0.676 to 1.902 hours. 
