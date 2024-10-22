@@ -58,13 +58,10 @@ We constructed the confidence interval using the formula
 p-hat = z +/- sqrt((p-hat)*(1 - p-hat) / n), where p-hat is the sample proportion of students who played a video game in the past week and n is the sample size. Z is the Z-score for the confidence level we chose (95%). 
 
 ### Analysis
+
 Point estimates are a single numerical value that summarizes the data based on the sample data. In this case, point_estimate_fraction is a point estimate (sample proportion) that estimates the proportion of students who played a video game in the week through a single number, approximately 0.374.
 Interval estimates, on the other hand, provide some leeway in case the point estimate is close but not exactly the same as the population proportion. The interval estimate uses the point estimate and creates a range depending on our chosen confidence level, which in this case, is 95%. In this case, we can say that if we take many independent samples of size n = 91 from the population, about 95% of them would cover the true population proportion (p). 
 It is important to note that it would be incorrect to state we are 95% confident that p is between 0.274 (the lower interval) and 0.473 (the upper interval) because the confidence interval is not measuring our confidence in a particular interval. It is also incorrect to state that there is a 95% chance that p is between 0.274 and 0.473 because p is a fixed value, and we thus should not calculate the probability of it occurring within a range. 
-
-
-### Conclusion
-The point estimate gives the best estimate for the proportion of students who played a video game in the week prior to taking the survey through a single value, while the interval estimate estimates this proportion through a range of values. However, this range is not guaranteed to have all sample proportions within this range if we repeated the sampling process many times. The higher our confidence level, the wider the interval range since there is a higher likelihood of the sampling proportions falling into the confidence level. Similarly, the lower our confidence level, the smaller the confidence interval. 
 
 ## Question 02
 ### Methods
