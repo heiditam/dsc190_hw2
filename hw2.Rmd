@@ -72,9 +72,38 @@ Point estimates are a single numerical value that summarizes the data based on t
 Interval estimates, on the other hand, provide some leeway in case the point estimate is close but not exactly the same as the population proportion. The interval estimate uses the point estimate and creates a range depending on our chosen confidence level, which in this case, is 95%. In this case, we can say that if we take many independent samples of size n = 91 from the population, about 95% of them would cover the true population proportion (p). 
 It is important to note that it would be incorrect to state we are 95% confident that p is between 0.274 (the lower interval) and 0.473 (the upper interval) because the confidence interval is not measuring our confidence in a particular interval. It is also incorrect to state that there is a 95% chance that p is between 0.274 and 0.473 because p is a fixed value, and we thus should not calculate the probability of it occurring within a range. 
 
+\pagebreak
+
 ## Question 02
 ### Methods
 To understand the differences in distributions of the hours played per week and the reported frequency of play, we graphed each as a frequency histogram. 
+
+```{r echo=FALSE}
+par(mfrow=c(1, 2))
+hist(video_data$freq, main="Frequency of Video Game Play", xlab="Frequency", axes=FALSE)
+axis(2)
+
+axis(1, at=c(1, 2, 3, 4), labels=FALSE, tick=TRUE)
+text(x=c(1, 2, 3, 4), y=par("usr")[3] - 0.5, 
+     labels=c("Daily", "Weekly", "Monthly", "Semesterly"), 
+     srt=45, adj=1, xpd=TRUE, cex=0.8)
+
+hist(video_data$time, main="Time of Video Game Play", xlab="Time Played a Week Prior (hours)")
+```
+
+Additionally, we examined the basic summary statistics of first the frequency cateogory then time category.
+
+```{r echo=FALSE}
+library(pander)
+pander(summary(video_data$freq))
+pander(summary(video_data$time))
+```
+
+### Analysis
+Based on the frequency histograms, most students report their video gaming frequency to be weekly, followed by semesterly, then monthly, and finally daily. A majority of survey submissions report the count of hours spent playing video gamees in the week prior to be between 0 and 5, with some people reporting 10 to 15 hours and fewer 25 to 30 hours.  
+
+### Conclusion
+The results of graphing each feature of the survey 
 
 ## Question 03
 ### Methods
