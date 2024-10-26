@@ -269,3 +269,16 @@ It is important to note there is a distinction between the first two bullets, wh
 
 ### Conclusion
 In general, students enjoy playing video games. The most important determinants of whether students like or dislike playing video games are relaxation, mastery, time, and cost. However, it is important to note there may be non-response bias because only the people who played video games were able to say what they liked about the games. All students, regardless of whether they played video games or not, had to answer the question of what they disliked about playing video games. For the question of what people disliked, there could be a difference in the answers between those who have played video games and those who have not. Without considering the breakdown of whether an individual plays video games, we can simply state that students in general dislike the time and cost when it comes to playing games. 
+
+
+## Question 05
+
+### Methods
+First, we find the indices of each responder group.
+```{r}
+males <- as.numeric(rownames(video_data[video_data$sex == 1, ]))
+females <- as.numeric(rownames(video_data[video_data$sex == 0, ]))
+
+computer <- as.numeric(rownames(video_data[video_data$own == 1, ]))
+no_computer <- as.numeric(rownames(video_data[video_data$own == 0, ]))
+```
