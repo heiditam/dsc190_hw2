@@ -174,6 +174,38 @@ From the histogram and the qq plot, we can see the sample distribution of the nu
 
 ## Question 04
 ### Methods
+
+```{r echo=FALSE}
+library(ggplot2)
+# Summing counts for each category
+genre_counts <- colSums(video_multiple[, c("action", "adv", "sim", "sport", "strategy")], na.rm = TRUE)
+reason_counts <- colSums(video_multiple[, c("relax", "coord", "challenge", "master", "bored")], na.rm = TRUE)
+dislike_counts <- colSums((video_multiple[, c("graphic", "time", "frust", "lonely", "rules", "cost", "boring", "friends", "point")]), na.rm = TRUE)
+
+# Creating individual data frames for each category
+genre_df <- data.frame(Category = names(genre_counts), Count = as.numeric(genre_counts))
+reason_df <- data.frame(Reason = names(reason_counts), Count = as.numeric(reason_counts))
+dislike_df <- data.frame(Reason_Dislike = names(dislike_counts), Count = as.numeric(dislike_counts))
+
+# Creating the bar plot for game genres
+ggplot(genre_df, aes(x = Category, y = Count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Counts of Game Genres", x = "Game Genre", y = "Count") +
+  theme_minimal()
+
+# Creating the bar plot for reasons to play video games
+ggplot(reason_df, aes(x = Reason, y = Count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Counts of Reasons to Play Video Games", x = "Reason", y = "Count") +
+  theme_minimal()
+
+# Creating the bar plot for reasons to dislike video games
+ggplot(dislike_df, aes(x = Reason_Dislike, y = Count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Counts of Reasons to Dislike Video Games", x = "Reason", y = "Count") +
+  theme_minimal()
+```
+
 The second question of the Attributes section keeps track of why people play the games checked above. This section was marked with binary values, where 1 means that the person selected that option and 0 means that the person didn't select the option. We made a list of the mean results for each option in this question, which represents the proportion of people who chose that particular option as why they enjoy playing video games.
 
 ```{r}
