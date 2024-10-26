@@ -105,6 +105,8 @@ Based on the frequency histograms, most students report their video gaming frequ
 ### Conclusion
 The results of graphing each feature of the survey 
 
+\pagebreak
+
 ## Question 03
 ### Methods
 
@@ -168,6 +170,8 @@ The confidence interval estimate average, from about 0.676 to 1.902, means that 
 ### Conclusion
 From the histogram and the qq plot, we can see the sample distribution of the number of hours spent playing video games is extremely skewed. Additionally, n is large but n / N = 91/314 is not small. We are unsure about whether the probability distribution of the sample average follows a normal curve, so can bootstrap to estimate the properties of the population. We collected 400 samples, each with a size of 91 since our initial sample was of size 91. We double checked for normality using a histogram and QQ Plot before continuing with bootstrapping. Then, we created the point estimate by taking the mean of the bootstrapped samples. Our point estimate was about 1.242, which would be the average amount of time we would expect to be spent playing video games in the week prior to the survey if we had to summarize this in a single value. We also created a 95% confidence interval, which captures 95% of the samples within the range of 0.676 to 1.902 hours. 
 
+\pagebreak
+
 ## Question 04
 ### Methods
 The second question of the Attributes section keeps track of why people play the games checked above. This section was marked with binary values, where 1 means that the person selected that option and 0 means that the person didn't select the option. We made a list of the mean results for each option in this question, which represents the proportion of people who chose that particular option as why they enjoy playing video games.
@@ -192,7 +196,7 @@ Four people out of 91 respondents have not played video games before. Since two-
 
 By sorting the reasons_played list in decreasing order by value, we can see the two most popular reasons for playing video games are for relaxation and people enjoy the feeling of mastery.
 ```{r}
-sort(unlist(reasons_played), decreasing = TRUE)
+T2_pros <- sort(unlist(reasons_played), decreasing = TRUE)
 ```
 
 We will repeat this process to determine the main reasons why people dislike playing video games. 
@@ -203,7 +207,21 @@ for (col in c("time", "frust", "lonely", "rules", "cost", "bored", "friends", "p
   mean_value2 <- mean(video_multiple[[col]], na.rm = TRUE)
   disadvantages[[col]] <- mean_value2
 }
-sort(unlist(disadvantages), decreasing = TRUE)
+T2_cons <- sort(unlist(disadvantages), decreasing = TRUE)
 ```
 
-The top two reasons why people dislike playing video games are time and cost.
+The top two reasons why people dislike playing video games are time and cost. We will add relaxation, mastery, time, and cost to the variable reasons_for likeliness.
+
+```{r}
+reasons_for_likeliness <- c('relaxation', 'master', 'time', 'cost')
+```
+
+### Analysis
+It is important to note there is a distinction between the first two bullets, which can only be generalized to students who play video games, and the last two bullets, which can be generalized to all students. 
+* About **0.667 of the students who play video games** enjoy them because they are **relaxing**. It is also worth noting that in the 'Other' category, people listed other reasons why they enjoy playing video games, and these included 'excitement', 'fun', and 'lowers stress', which supports the idea that many students who play video games find them relaxing and destressing. 
+* About **0.287 of the students who play video games** enjoy them because they enjoy the feeling of **mastery**. 
+* About **0.483 of all students** don't like video games because of the amount of **time** they take. Time is a very critical factor when it comes to playing video games. In fact, of the nine people who provided an additional reason why they don't like video games (denoted in the 'Other2' column), four of them listed that they felt unproductive while playing video games.
+* About **0.402 of all students** don't like video games because of their **cost**. This number is almost half, showing that cost is also a very significant factor people consider when it comes to playing video games.
+
+### Conclusion
+In general, students enjoy playing video games. The most important determinants of whether students like or dislike playing video games are relaxation, mastery, time, and cost. However, it is important to note there may be non-response bias because only the people who played video games were able to say what they liked about the games. All students, regardless of whether they played video games or not, had to answer the question of what they disliked about playing video games. For the question of what people disliked, there could be a difference in the answers between those who have played video games and those who have not. Without considering the breakdown of whether an individual plays video games, we can simply state that students in general dislike the time and cost when it comes to playing games. 
