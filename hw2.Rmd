@@ -79,16 +79,28 @@ It is important to note that it would be incorrect to state we are 95% confident
 To understand the differences in distributions of the hours played per week and the reported frequency of play, we graphed each as a frequency histogram. 
 
 ```{r echo=FALSE}
-par(mfrow=c(1, 2))
-hist(video_data$freq, main="Frequency of Video Game Play", xlab="Frequency", axes=FALSE)
-axis(2)
+library(ggplot2)
 
-axis(1, at=c(1, 2, 3, 4), labels=FALSE, tick=TRUE)
-text(x=c(1, 2, 3, 4), y=par("usr")[3] - 0.5, 
-     labels=c("Daily", "Weekly", "Monthly", "Semesterly"), 
-     srt=45, adj=1, xpd=TRUE, cex=0.8)
+video_data$freq <- factor(video_data$freq, 
+                          levels = c(1, 2, 3, 4), 
+                          labels = c("Daily", "Weekly", "Monthly", "Semesterly"))
 
-hist(video_data$time, main="Time of Video Game Play", xlab="Time Played a Week Prior (hours)")
+# Create the first histogram for 'freq'
+plot_freq <- ggplot(video_data, aes(x = freq)) +
+  geom_bar(fill = "skyblue") +
+  labs(title = "Frequency of Video Game Play", x = "Frequency", y = "Count") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Create the second histogram for 'time'
+plot_time <- ggplot(video_data, aes(x = time)) +
+  geom_histogram(binwidth = 5, fill = "lightgreen") +
+  labs(title = "Time of Video Game Play", x = "Time Played a Week Prior (hours)", y = "Count") +
+  theme_minimal()
+
+# Combine the two plots using gridExtra
+library(gridExtra)
+grid.arrange(plot_freq, plot_time, ncol = 2)
 ```
 
 Additionally, we examined the basic summary statistics of first the frequency cateogory then time category.
@@ -100,10 +112,10 @@ pander(summary(video_data$time))
 ```
 
 ### Analysis
-Based on the frequency histograms, most students report their video gaming frequency to be weekly, followed by semesterly, then monthly, and finally daily. A majority of survey submissions report the count of hours spent playing video games in the week prior to be between 0 and 5, with some people reporting 10 to 15 hours and fewer 25 to 30 hours.  
+Based on the frequency histograms, most students report their video gaming frequency to be weekly, followed by semesterly, then monthly, and finally daily. A majority of survey submissions report the count of hours spent playing video gamees in the week prior to be between 0 and 5, with some people reporting 10 to 15 hours and fewer 25 to 30 hours.  
 
 ### Conclusion
-The results of graphing each feature of the survey 
+The results of graphing each feature of the survey showed that most students were correctly reporting the frequency of their video game play. The highest frequency of hours played the week prior was 0 to 5 hours, which is logical considering that the highest frequency of video game play was weekly. It is reasonable to assume that a majority of students would play video games only a few hours a week. Additionally, the external factor of an exam during the week prior would most likely have a negative association with the number of hours played for that week.
 
 \pagebreak
 
