@@ -100,7 +100,7 @@ pander(summary(video_data$time))
 ```
 
 ### Analysis
-Based on the frequency histograms, most students report their video gaming frequency to be weekly, followed by semesterly, then monthly, and finally daily. A majority of survey submissions report the count of hours spent playing video gamees in the week prior to be between 0 and 5, with some people reporting 10 to 15 hours and fewer 25 to 30 hours.  
+Based on the frequency histograms, most students report their video gaming frequency to be weekly, followed by semesterly, then monthly, and finally daily. A majority of survey submissions report the count of hours spent playing video games in the week prior to be between 0 and 5, with some people reporting 10 to 15 hours and fewer 25 to 30 hours.  
 
 ### Conclusion
 The results of graphing each feature of the survey 
@@ -167,3 +167,43 @@ The confidence interval estimate average, from about 0.676 to 1.902, means that 
 
 ### Conclusion
 From the histogram and the qq plot, we can see the sample distribution of the number of hours spent playing video games is extremely skewed. Additionally, n is large but n / N = 91/314 is not small. We are unsure about whether the probability distribution of the sample average follows a normal curve, so can bootstrap to estimate the properties of the population. We collected 400 samples, each with a size of 91 since our initial sample was of size 91. We double checked for normality using a histogram and QQ Plot before continuing with bootstrapping. Then, we created the point estimate by taking the mean of the bootstrapped samples. Our point estimate was about 1.242, which would be the average amount of time we would expect to be spent playing video games in the week prior to the survey if we had to summarize this in a single value. We also created a 95% confidence interval, which captures 95% of the samples within the range of 0.676 to 1.902 hours. 
+
+## Question 04
+### Methods
+The second question of the Attributes section keeps track of why people play the games checked above. This section was marked with binary values, where 1 means that the person selected that option and 0 means that the person didn't select the option. We made a list of the mean results for each option in this question, which represents the proportion of people who chose that particular option as why they enjoy playing video games.
+
+```{r}
+reasons_played <- list()
+for (col in c("graphic", "relax", "coord", "challenge", "master", "bored")){
+     mean_value <- mean(video_multiple[[col]], na.rm = TRUE)
+     reasons_played[[col]] <- mean_value
+}
+```
+
+This yields 0.26 for graphic, 0.67 for relax, 0.05 for coordination, 0.24 for challenge, 0.29 for master, and 0.28 for bored. Since two-thirds of gamers listed relaxation as one of their reasons for playing, it’s reasonable to conclude that most people who play video games likely find them enjoyable.
+
+People who do not play video games were told to skip the first question. This means that they marked neither 0 nor 1 in the question options and left them as NA. We can calculate the number of people who skipped the first question by choosing a column and counting the NAs. We can choose a random column because the number of NAs should be the same in each category (Action, Adventure, Simulation, Sports, Strategy) if people followed directions and skipped the question when they have not played video games before. 
+
+```{r}
+sum(is.na(video_multiple$action))
+```
+
+Four people out of 91 respondents have not played video games before. Since two-thirds of the people who DO play video games play them for relaxation, that means 2/3 * (91 - 4)  = 58 people out of 91 who enjoy playing video games. That's equivalent to approximately 63.74%. This is more than half, so it is fair to say in general, most students enjoy playing video games!
+
+By sorting the reasons_played list in decreasing order by value, we can see the two most popular reasons for playing video games are for relaxation and people enjoy the feeling of mastery.
+```{r}
+sort(unlist(reasons_played), decreasing = TRUE)
+```
+
+We will repeat this process to determine the main reasons why people dislike playing video games. 
+
+```{r}
+disadvantages <- list()
+for (col in c("time", "frust", "lonely", "rules", "cost", "bored", "friends", "point")){
+  mean_value2 <- mean(video_multiple[[col]], na.rm = TRUE)
+  disadvantages[[col]] <- mean_value2
+}
+sort(unlist(disadvantages), decreasing = TRUE)
+```
+
+The top two reasons why people dislike playing video games are time and cost.
