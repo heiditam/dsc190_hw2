@@ -119,11 +119,13 @@ Both the histogram and QQ plot (the points closely follow the straight reference
 
 POINT ESTIMATE: the mean of the bootstrapped sample means
 ```{r}
+# Close to the sample average
 point_estimate_average <- mean(boot.mean)
 ```
 
 CONFIDENCE INTERVAL: contains a range of values that likely contain the population parameter, the average amount of time spent playing video games in the week before the survey for UC Berkeley students enrolled in a particular section.
 ```{r}
+# Bootstrap confidence interval
 # Find the values between 2.5% to 97.5% to capture the middle 95% of the data.
 interval_estimate <- c(quantile(boot.mean, 0.025), quantile(boot.mean, 0.975))
 lower_interval_estimate_average <- interval_estimate[[1]]
