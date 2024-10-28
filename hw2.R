@@ -335,3 +335,6 @@ chi_squared_test <- chisq.test(observed_counts, p = c(0.1, 0.4, 0.3, 0.2))
 observed_counts2 <- c(4, 8, 52, 31)
 chi_squared_test2 <- chisq.test(observed_counts2, p = c(0.1, 0.4, 0.3, 0.2))
 
+# ADVANCED ANALYSIS
+library(ggplot2)
+model <- lm(grade ~ time, data = video_data)

@@ -1,18 +1,20 @@
 ---
 title: "Video Game Preferences Among UC Berkeley Stats Students in Fall 1994"
-author: Student 1 and Student 2
-output: pdf_document
+author: "Student 1 and Student 2"
 date: "2024-10-19"
+output:
+  word_document: default
+  pdf_document: default
 font: 12pt
 ---
 
 # 0. Contribution Statement
 
 ## Student 1
-Student 1 wrote the description of the data and worked on questions 1, 3, and 4 (except for the graphs). Student 1 also worked on the extra credit problem (#6).
+Student 1 wrote the description of the data and worked on questions 1, 3, and 4 (except for the graphs). Student 1 also worked on the extra credit problem (#6). Student 1 also did the regression analysis. 
 
 ## Student 2
-Student 2 mainly worked on questions 2 and 5 and provided graphs for question 4. 
+Student 2 mainly worked on questions 2 and 5 and provided graphs for question 4. Student 2 also did the conclusion and discussion. 
 
 \pagebreak
 
@@ -532,3 +534,23 @@ With our new chi-squared test, we still have a p-value of 1.223 * 10^(-11) < 0.0
 
 ### Conclusion
 Using a proportion table and chi-squared test, we found that there is a significant difference between the proportion of grades expected to be achieved and the target distribution. However, there is no difference in the grading distribution if the four non-respondents had failing grades. 
+
+## Advanced Analysis
+### Methods
+For our advanced analysis of this dataset, we decided to do a regression analysis to see how grade varies with the number of hours spent playing video games. 
+```{r}
+library(ggplot2)
+model <- lm(grade ~ time, data = video_data)
+```
+### Analysis
+From the regression analysis, we are able to see that a line of regression fitting the data would have a slope of about -0.009725 and an intercept at (0, 3.265). This means that for every additional hour someone plays video games in the past week before their exam, their expected grade decreases by the 0.009 in grade points. There is a negative association between the number of hours spent playing video games and the grade achieved. Additionally, the intercept is at (0, 3.265), which tells us that when people did not play any video games in the past week, we would expect their grade to be 3.265, which means most likely to be a B with a smaller chance of receiving an A. 
+
+### Conclusion
+Typically, more hours playing video games per week results in a lower grade in the course. We suspect this is because students neglect their studies when they are focused on their video games, and thus, are less prepared for the exams. However, there may also be confounding variables that cause this relationship in lower grades, such as difficulty of the class, innate ability to problem solve, and previous experience in statistics. Another confounding variable is income and accessibility to resources. For example, a family may provide their child with many video games because they are wealthy, but the stability of the family's wealth may also cause the child to not take school seriously. 
+
+## Conclusion
+### Conclusion Summary
+Our analysis of this survey data provided important insight into the video gaming habits of UC Berkeley students enrolled in a particular stats class. It is clear that these students were a diverse sample through our analysis of their responses. Additionally, we were able to understand the reasons and motivations behind their video game habits and explored the complexities of their responses.   
+
+### Discussion
+After analyzing the data in depth, it is clear that it has major flaws that prevent further analysis. One flaw that was prominent throughout the data analyzation process was that some questions of the survey included customizable responses that each respondent could write their own response into. This limits the scope of our analysis, as we had no was to effectively assess this category of answers. Another flaw that we noticed was that it was not clear how the two dataframes were related. There was no clear relational key that allowed us to clearly understand which respondent provided which answers.   
