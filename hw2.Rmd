@@ -127,7 +127,7 @@ The results of graphing each feature of the survey showed that most students wer
 ### Methods
 
 ```{r}
-hist(video_data$time)
+hist(video_data$time, xlab = 'Number of Hours Played in the Week Prior to the Survey', main = 'Frequency of Hours Playing Video Games')
 ```
 
 Since the distribution of the amount of time people played video games in the week prior to taking the survey is not approximately normal, we need to create a bootstrap population. We can do this by repeating every sample for 314/ 91 is about 3.45 times since our sample was drawn from a population of N = 314 eligible students. 
@@ -515,12 +515,12 @@ We are interested in whether our findings of the sample proportions significantl
 
 ```{r}
 counts <- table(video_data$grade, useNA = 'no')
-# We to modify the observed counts to have a 0 to account for the missing grade of D.
+# We need to modify the observed counts to have a 0 to account for the missing grade of D.
 observed_counts <- c(0, 8, 52, 31)
 chi_squared_test <- chisq.test(observed_counts, p = c(0.1, 0.4, 0.3, 0.2))
 ```
 
-With a p-value of 1.629 * 10^(-13), we can reject the null hypothesis. There is a difference in the proportion of grades in the target distribution and the true outcome. 
+With a p-value of 1.629 * 10^(-13) < 0.05, we can reject the null hypothesis. There is a difference in the proportion of grades in the target distribution and the true outcome. 
 
 Now, we will investigate the impact of non-response (4 people) having failing grades.
 ```{r}
@@ -528,7 +528,7 @@ observed_counts2 <- c(4, 8, 52, 31)
 chi_squared_test2 <- chisq.test(observed_counts, p = c(0.1, 0.4, 0.3, 0.2))
 ```
 
-With our new chi-squared test, we still have a p-value of 1.629 * 10^(-13), we can reject the null hypothesis. There is a difference in the proportion of grades in the target distribution and the true outcome, and the non-respondents do not change the picture of the grade distribution.
+With our new chi-squared test, we still have a p-value of 1.223 * 10^(-11) < 0.05, we can reject the null hypothesis. There is a difference in the proportion of grades in the target distribution and the true outcome, and the non-respondents do not change the picture of the grade distribution.
 
 ### Conclusion
 Using a proportion table and chi-squared test, we found that there is a significant difference between the proportion of grades expected to be achieved and the target distribution. However, there is no difference in the grading distribution if the four non-respondents had failing grades. 
