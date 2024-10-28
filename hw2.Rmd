@@ -1,12 +1,15 @@
 ---
 title: "Video Game Preferences Among UC Berkeley Stats Students in Fall 1994"
-author: Heidi Tam and Paige Pagaduan
+author: Heidi Tam and Student 2
 output: pdf_document
 date: "2024-10-19"
 font: 12pt
 ---
 
 # 0. Contribution Statement
+
+## Student 2
+Student 2 mainly worked on questions 2 and 5 and provided graphs for question 4. 
 
 \pagebreak
 
@@ -270,15 +273,217 @@ It is important to note there is a distinction between the first two bullets, wh
 ### Conclusion
 In general, students enjoy playing video games. The most important determinants of whether students like or dislike playing video games are relaxation, mastery, time, and cost. However, it is important to note there may be non-response bias because only the people who played video games were able to say what they liked about the games. All students, regardless of whether they played video games or not, had to answer the question of what they disliked about playing video games. For the question of what people disliked, there could be a difference in the answers between those who have played video games and those who have not. Without considering the breakdown of whether an individual plays video games, we can simply state that students in general dislike the time and cost when it comes to playing games. 
 
+\pagebreak
 
 ## Question 05
 
 ### Methods
-First, we find the indices of each responder group.
-```{r}
-males <- as.numeric(rownames(video_data[video_data$sex == 1, ]))
-females <- as.numeric(rownames(video_data[video_data$sex == 0, ]))
+First, we find the indices of each respondent group and checked which answers from the attitude questions had the most responses in order to narrow down the range of our analysis.
+```{r echo=FALSE}
+library(pander)
+males <- which(video_data$sex == 1)
+females <- which(video_data$sex == 0)
 
-computer <- as.numeric(rownames(video_data[video_data$own == 1, ]))
-no_computer <- as.numeric(rownames(video_data[video_data$own == 0, ]))
+for_pay <- which(video_data$work >= 1)
+no_pay <- which(video_data$work == 0)
+
+computer <- which(video_data$own == 1)
+no_computer <- which(video_data$own == 0)
+
+pander(colSums(Filter(is.numeric, video_multiple), na.rm = TRUE))
+
 ```
+\pagebreak
+
+Then, we checked the means of the genres Action, Strategy, Sport (answers with the top three highest frequency for this question) by each group.
+
+```{r echo=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(gridExtra)
+
+# Summarize the means and calculate standard error for each group
+calculate_summary <- function(data, group_indices, group_name) {
+  data %>%
+    mutate(group = case_when(
+      row_number() %in% group_indices ~ group_name,
+      TRUE ~ "Other"
+    )) %>%
+    group_by(group) %>%
+    summarize(
+      mean_action = mean(action, na.rm = TRUE),
+      mean_strategy = mean(strategy, na.rm = TRUE),
+      mean_sport = mean(sport, na.rm = TRUE),
+      n = n(),  # Sample size
+      se_time = sd(time, na.rm = TRUE) / sqrt(n),
+      se_cost = sd(cost, na.rm = TRUE) / sqrt(n),
+      se_frust = sd(frust, na.rm = TRUE) / sqrt(n)
+    ) %>%
+    pivot_longer(cols = starts_with("mean"), names_to = "Variable", values_to = "Mean") %>%
+    pivot_longer(cols = starts_with("se_"), names_to = "SE_Variable", values_to = "SE") %>%
+    mutate(SE_Variable = gsub("se_", "", SE_Variable)) # Clean up SE variable names
+}
+
+# Calculate summaries for each category
+sex_data <- calculate_summary(video_multiple, males, "Males")
+sex_data <- bind_rows(sex_data, calculate_summary(video_multiple, females, "Females"))
+
+pay_data <- calculate_summary(video_multiple, for_pay, "For Pay")
+pay_data <- bind_rows(pay_data, calculate_summary(video_multiple, no_pay, "No Pay"))
+
+computer_data <- calculate_summary(video_multiple, computer, "Computer")
+computer_data <- bind_rows(computer_data, calculate_summary(video_multiple, no_computer, "No Computer"))
+
+# Create bar plots with error bars
+create_plot <- function(data, title) {
+  ggplot(data, aes(x = group, y = Mean, fill = Variable)) +
+    geom_bar(stat = "identity", position = position_dodge(), width = 0.7) +
+    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE), 
+                  position = position_dodge(0.7), width = 0.25) +
+    labs(title = title, x = "Group", y = "Mean Value") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.text = element_text(size = 8),
+          legend.title = element_text(size = 10),
+          plot.title = element_text(size = 10))
+}
+
+# Create plots
+sex_plot <- create_plot(sex_data, "Mean Values of Action, Strategy, and Sport by Sex")
+pay_plot <- create_plot(pay_data, "Mean Values of Action, Strategy, and Sport by Pay")
+computer_plot <- create_plot(computer_data, "Mean Values of Action, Strategy, and Sport by Computer Use")
+
+# Arrange plots side by side
+grid.arrange(sex_plot, pay_plot, ncol = 2)
+computer_plot
+
+```
+
+Next, we analyzed the means of Relax, Master, and Bored (answers with the top three highest frequency for this question) by each group.
+
+```{r echo=FALSE}
+# Summarize the means and calculate standard error for each group
+calculate_summary <- function(data, group_indices, group_name) {
+  data %>%
+    mutate(group = case_when(
+      row_number() %in% group_indices ~ group_name,
+      TRUE ~ "Other"
+    )) %>%
+    group_by(group) %>%
+    summarize(
+      mean_time = mean(time, na.rm = TRUE),
+      mean_cost = mean(cost, na.rm = TRUE),
+      mean_frust = mean(frust, na.rm = TRUE),
+      n = n(),  # Sample size
+      se_relax = sd(relax, na.rm = TRUE) / sqrt(n),
+      se_master = sd(master, na.rm = TRUE) / sqrt(n),
+      se_bored = sd(bored, na.rm = TRUE) / sqrt(n)
+    ) %>%
+    pivot_longer(cols = starts_with("mean"), names_to = "Variable", values_to = "Mean") %>%
+    pivot_longer(cols = starts_with("se_"), names_to = "SE_Variable", values_to = "SE") %>%
+    mutate(SE_Variable = gsub("se_", "", SE_Variable)) # Clean up SE variable names
+}
+
+# Calculate summaries for each category
+sex_data <- calculate_summary(video_multiple, males, "Males")
+sex_data <- bind_rows(sex_data, calculate_summary(video_multiple, females, "Females"))
+
+pay_data <- calculate_summary(video_multiple, for_pay, "For Pay")
+pay_data <- bind_rows(pay_data, calculate_summary(video_multiple, no_pay, "No Pay"))
+
+computer_data <- calculate_summary(video_multiple, computer, "Computer")
+computer_data <- bind_rows(computer_data, calculate_summary(video_multiple, no_computer, "No Computer"))
+
+# Create bar plots with error bars
+create_plot <- function(data, title) {
+  ggplot(data, aes(x = group, y = Mean, fill = Variable)) +
+    geom_bar(stat = "identity", position = position_dodge(), width = 0.7) +
+    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE), 
+                  position = position_dodge(0.7), width = 0.25) +
+    labs(title = title, x = "Group", y = "Mean Value") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.text = element_text(size = 8),
+          legend.title = element_text(size = 10),
+          plot.title = element_text(size = 10))
+}
+
+# Create plots
+sex_plot <- create_plot(sex_data, "Mean Values of Relax, Master, and Bored by Sex")
+pay_plot <- create_plot(pay_data, "Mean Values of Relax, Master, and Bored by Sex")
+computer_plot <- create_plot(computer_data, "Mean Values of Relax, Master, and Bored by Sex")
+
+# Arrange plots side by side
+grid.arrange(sex_plot, pay_plot, ncol = 2)
+computer_plot
+```
+
+
+Finally, we examined the means of Time, Cost, and Frust (answers with the top three highest frequency for this question) by each group.
+
+```{r echo=FALSE}
+# Summarize the means and calculate standard error for each group
+calculate_summary <- function(data, group_indices, group_name) {
+  data %>%
+    mutate(group = case_when(
+      row_number() %in% group_indices ~ group_name,
+      TRUE ~ "Other"
+    )) %>%
+    group_by(group) %>%
+    summarize(
+      mean_time = mean(time, na.rm = TRUE),
+      mean_cost = mean(cost, na.rm = TRUE),
+      mean_frust = mean(frust, na.rm = TRUE),
+      n = n(),  # Sample size
+      se_time = sd(time, na.rm = TRUE) / sqrt(n),
+      se_cost = sd(cost, na.rm = TRUE) / sqrt(n),
+      se_frust = sd(frust, na.rm = TRUE) / sqrt(n)
+    ) %>%
+    pivot_longer(cols = starts_with("mean"), names_to = "Variable", values_to = "Mean") %>%
+    pivot_longer(cols = starts_with("se_"), names_to = "SE_Variable", values_to = "SE") %>%
+    mutate(SE_Variable = gsub("se_", "", SE_Variable)) # Clean up SE variable names
+}
+
+# Calculate summaries for each category
+sex_data <- calculate_summary(video_multiple, males, "Males")
+sex_data <- bind_rows(sex_data, calculate_summary(video_multiple, females, "Females"))
+
+pay_data <- calculate_summary(video_multiple, for_pay, "For Pay")
+pay_data <- bind_rows(pay_data, calculate_summary(video_multiple, no_pay, "No Pay"))
+
+computer_data <- calculate_summary(video_multiple, computer, "Computer")
+computer_data <- bind_rows(computer_data, calculate_summary(video_multiple, no_computer, "No Computer"))
+
+# Create bar plots with error bars
+create_plot <- function(data, title) {
+  ggplot(data, aes(x = group, y = Mean, fill = Variable)) +
+    geom_bar(stat = "identity", position = position_dodge(), width = 0.7) +
+    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE), 
+                  position = position_dodge(0.7), width = 0.25) +
+    labs(title = title, x = "Group", y = "Mean Value") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.text = element_text(size = 8),
+          legend.title = element_text(size = 10),
+          plot.title = element_text(size = 10))
+}
+
+# Create plots
+sex_plot <- create_plot(sex_data, "Mean Values of Time, Cost, and Frust by Sex")
+pay_plot <- create_plot(pay_data, "Mean Values of Time, Cost, and Frust by Pay")
+computer_plot <- create_plot(computer_data, "Mean Values of Time, Cost, and Frust by Computer Use")
+
+# Arrange plots side by side
+grid.arrange(sex_plot, pay_plot, ncol = 2)
+computer_plot
+```
+
+### Analysis
+
+Based on the plots above, it is clear that there are significant differences in the distribution of each answer by within each group and across all groups. Generally, the plots for sex by group and ownership of computer by group have the similar distributions. More specifically, the distribution for responses from males is similar to the distribution for responses from people who do not own a computer. Additionally, the only answer with the highest frequency across all groups was Relax in response to the question concerning why the respondent played video games, if they did at all. 
+
+
+### Conclusion
+
+The graphical representations of the means of the three most popular answers by group show that there significant differences between the distributions of each answer. The differences vary between and among different groups of respondents, and among respondents who like to play video games and those that do not. The greatest difference is among those who own and do not own computers, which makes logical sense. Although video games started with video game consoles, they have recently transitioned to personal computers. Someone who does not own a computer would not have the ability to play most video games, which is why the responses for those without computers is more negative to neutral. 
