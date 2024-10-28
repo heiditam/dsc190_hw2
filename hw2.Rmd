@@ -1,6 +1,6 @@
 ---
 title: "Video Game Preferences Among UC Berkeley Stats Students in Fall 1994"
-author: Heidi Tam and Student 2
+author: Student 1 and Student 2
 output: pdf_document
 date: "2024-10-19"
 font: 12pt
@@ -9,7 +9,7 @@ font: 12pt
 # 0. Contribution Statement
 
 ## Student 1
-Student 1 mainly worked on questions 1, 3, and 4 (except for the graphs).
+Student 1 wrote the description of the data and worked on questions 1, 3, and 4 (except for the graphs). Student 1 also worked on the extra credit problem (#6).
 
 ## Student 2
 Student 2 mainly worked on questions 2 and 5 and provided graphs for question 4. 
@@ -35,8 +35,6 @@ The data from videoMultiple.txt was the second part of the survey and covered wh
 First, we loaded the data in through R.
 
 ```{r setup, include=FALSE}
-
-# TODO: bootstrap
 
 knitr::opts_chunk$set(echo = TRUE)
 video_data = read.table("videodata.txt", header=TRUE)
@@ -490,3 +488,47 @@ Based on the plots above, it is clear that there are significant differences in 
 ### Conclusion
 
 The graphical representations of the means of the three most popular answers by group show that there significant differences between the distributions of each answer. The differences vary between and among different groups of respondents, and among respondents who like to play video games and those that do not. The greatest difference is among those who own and do not own computers, which makes logical sense. Although video games started with video game consoles, they have recently transitioned to personal computers. Someone who does not own a computer would not have the ability to play most video games, which is why the responses for those without computers is more negative to neutral. 
+
+## Question 06 (Extra Credit)
+### Methods
+Ho: Our null hypothesis is that the distribution of the grades matches our target distribution.
+H1: Our alternative hypothesis is that one or more categories of grades differs from the expected.
+
+We created a graph to show the distribution of the grades as a histogram.
+```{r}
+library(ggplot2)
+distr_of_grades <- ggplot(video_data, aes(x = as.factor(grade))) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(x = "grade", y = "Count", title = "Distribution of Grades") +
+  theme_minimal()
+```
+It looks like no one expected to receive a D (1) in the course. Most (more than 50 out of 91 respondents) expected to receive a B (3) in the course. The next most popular expectation was an A (4), with more than 30 out of 91 respondents expecting to receive that grade. The least number of people (about 8 out of 91) expected to receive a C (2). 
+
+Now, we will calculate the proportions of each grade received by creating a proportion table. 
+```{r}
+grade_prop <- prop.table(table(video_data$grade, useNA = 'no'))
+```
+From the proportion table, we can see that there were about 34.07% A's, 57.14% B's, 8.79% C's, and 0% D's. This is quite different from the target distribution of 20% A's, 30% B's, 40% C's, and 10% D's. 
+
+### Analysis
+We are interested in whether our findings of the sample proportions significantly differ from the target distribution. To investigate this, we will conduct a chi-squared goodness of fit test.
+
+```{r}
+counts <- table(video_data$grade, useNA = 'no')
+# We to modify the observed counts to have a 0 to account for the missing grade of D.
+observed_counts <- c(0, 8, 52, 31)
+chi_squared_test <- chisq.test(observed_counts, p = c(0.1, 0.4, 0.3, 0.2))
+```
+
+With a p-value of 1.629 * 10^(-13), we can reject the null hypothesis. There is a difference in the proportion of grades in the target distribution and the true outcome. 
+
+Now, we will investigate the impact of non-response (4 people) having failing grades.
+```{r}
+observed_counts2 <- c(4, 8, 52, 31)
+chi_squared_test2 <- chisq.test(observed_counts, p = c(0.1, 0.4, 0.3, 0.2))
+```
+
+With our new chi-squared test, we still have a p-value of 1.629 * 10^(-13), we can reject the null hypothesis. There is a difference in the proportion of grades in the target distribution and the true outcome, and the non-respondents do not change the picture of the grade distribution.
+
+### Conclusion
+Using a proportion table and chi-squared test, we found that there is a significant difference between the proportion of grades expected to be achieved and the target distribution. However, there is no difference in the grading distribution if the four non-respondents had failing grades. 
